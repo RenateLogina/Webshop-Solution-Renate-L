@@ -1,0 +1,46 @@
+﻿@model List<ItemModel>
+@{
+    ViewData["Title"] = "Basket";
+}
+
+<h2>Your cart</h2>
+@Html.ValidationSummary()
+@if (Model.Count == 0)
+{
+    <p> nothing in your cart!</p>
+}
+else
+{
+<table class="table table-striped">
+    <tr>
+        <th></th>
+        <th></th>
+        <th>Amount</th>
+        <th>Price</th>
+        <th></th>
+    </tr>
+
+        @foreach (var i in Model.GroupBy(u => u.Id).Select(u => u.First()))
+        {
+            <tr>
+                <td>@i.Id</td>
+                <td>@i.Name</td>
+                <td>@Model.Where(u => u.Id == i.Id).Count()</td>
+                <td>@i.Price</td>
+                <td><a asp-controller="Account" asp-action="Delete" asp-route-id="@i.Id">Delete</a></td>
+            </tr>
+        }
+
+
+
+
+    <tr>
+        <th></th>
+        <th></th>
+        <th></th>
+        <th>Total: @Model.Sum(u => u.Price)</th>
+        <th><a asp-controller="Account" asp-action="Confirm">Confirm</a></th>
+    </tr>
+</table>
+}
+

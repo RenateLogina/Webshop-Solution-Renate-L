@@ -1,0 +1,71 @@
+﻿@model HomeModel
+<!-- HomeModel, jo atverot index skatu, mums vajag redzēt gan menu kreisā pusē gan item sarakstu-->
+@{
+    ViewData["Title"] = "All Items";
+}
+<!-- Index parāda konkrēto kategoriju-->
+<!-- Kategoriju aplūkošana paliek tieši tāda pati kā Home Index-->
+<div class="row">
+    <!-- Index parāda konkrēto kategoriju-->
+    <div class="col-sm-4">
+        @foreach (var cat in Model.Categories.Where(c => c.ParentId == null))
+        {
+
+            <div class="list-group">
+                <a asp-area="" asp-controller="Item" asp-action="Index" class="list-group-item active">
+
+                    @cat.Name
+                    <span class="badge">
+                        @Model.Categories.Where(c => c.ParentId == cat.Id).Count()
+                    </span>
+
+                </a>
+                @foreach (var sub in Model.Categories.Where(c => c.ParentId == cat.Id))
+                {
+
+            <a asp-area="" asp-controller="Item" asp-action="Index" asp-route-id="@sub.Id" class="list-group-item">
+
+                @sub.Name
+                <span class="badge">
+                    @sub.ItemCount
+                </span>
+
+            </a>
+
+                }
+            </div>
+
+        }
+    </div>
+
+    <div class="col-sm-8">
+        <ol class="breadcrumb">
+            <li><a href="#">Home</a></li>
+            <li><a href="#">Electronics</a></li>
+            <li class="active">Mobile</li>
+        </ol>
+        <div>
+            <div class="row">
+                @foreach (var item in Model.Items)
+                {
+                    <div class="col-sm-6 col-md-4">
+                        <div class="thumbnail">
+                            <img src="@item.Image" />
+                            <div class="caption text-center">
+                                <h3>@item.Name</h3>
+                                <p>Price: <span>@item.Price</span></p>
+                                @if (Context.Session.GetUserName() != null)
+                                {
+                                <p><a asp-area="" asp-controller="Item" asp-action="Buy" asp-route-id="@item.Id" class="btn btn-primary" role="button">Add to cart</a></p>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+
+</div>
+
+

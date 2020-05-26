@@ -1,0 +1,34 @@
+﻿@model List<ItemModel>
+
+@{
+    ViewData["Title"] = "List";
+}
+<a asp-controller="Item" asp-action="AddItem">Add item</a>
+@if (Model.Count == 0)
+{
+    <h3>You have no items added to your shop!</h3>
+}
+else
+{
+<h2>All current items</h2>
+<table class="table table-striped">
+    <tr>
+        <th>ID</th>
+        <th>Item name</th>
+        <th>Category ID</th>
+        <th>Price</th>
+        <th></th>
+    </tr>
+    @foreach(var item in Model)
+    {
+        <tr>
+            <td>@item.Id</td>
+            <td>@item.Name</td>
+            <td>@item.CategoryId</td>
+            <td>@item.Price</td>
+            <td><a asp-controller="Item" asp-action="Delete" asp-route-id="@item.Id">Delete</a></td>
+        </tr>
+    }
+</table>
+}
+
